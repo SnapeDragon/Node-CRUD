@@ -1,0 +1,30 @@
+<h1>{{ title }}</h1>
+<p> Welcome to {{ title }} </p>
+
+{{#unless gflag}}
+ <form action="insert" method="post">
+  <input type="text" name="nm">
+  <button type="submit">Submit</button>
+</form>
+
+<a href="get-data"> Show Data</a>
+{{/unless}}
+
+{{#each items}}
+    {{ this.id }} {{ this.name}} <a href="/delete/{{ this.id }}"> Delete </a> <button onClick="showUpdateField('{{this.id}}')">Update</button><br><br>
+{{/each}}
+
+<div id="show-update-pack" style="display: none;">
+
+  <form action="/update" method="post">
+    <input type="hidden" name="id" id="update-id" value="" >
+    <input type="text" name="newname">
+    <button type="submit">Update</button>
+  </form>
+</div>
+<script>
+  function showUpdateField(id){
+    document.getElementById('show-update-pack').style.display = "block";
+    document.getElementById('update-id').value = id;
+  }
+</script>
