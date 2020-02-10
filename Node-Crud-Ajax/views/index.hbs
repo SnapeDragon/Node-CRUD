@@ -1,0 +1,42 @@
+  {{!-- <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script> --}}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
+<p>Welcome Home</p>
+<form method="post" id="insertForm">
+  <div class="form-row align-items-center">
+    <div class="col-auto">
+      <label class="sr-only" for="inlineFormInput">Name</label>
+      <input type="text" class="form-control mb-2" name="name" id="inlineFormInput" placeholder="Jane Doe">
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary mb-2">Submit</button>
+    </div>
+  </div>
+</form>
+<p id="insertedName"></p>
+<hr>
+<a class="btn btn-light" href="/names" role="button">Show Data</a>
+
+<script>
+  $(document).ready(function(){
+    $('form#insertForm').on('submit', function(e){
+      e.preventDefault();
+      var data = {'name': $('input[name = name]').val() };
+      
+      $.ajax({
+        type: 'post',
+        data: data,
+        url: '/insert',
+        dataType: 'json'
+      }).done(function(data){
+        console.log(data);
+        $('#insertedName').html(data.name + ' Inserted');  
+      });
+    });
+  });
+</script>
