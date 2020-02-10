@@ -1,0 +1,45 @@
+{{!-- <h1>
+  {{ title }}
+</h1> --}}
+<p>Databse List</p>
+
+<ul class="list-group container">
+    {{#each items}}
+  <li class="list-group-item"> {{ this.name }} 
+    <a href="/delete/{{ this.id }}"><button type="button" class="close mt-1 text-danger" aria-label="Close" style="outline: none;"><span aria-hidden="true">&times;</span></button></a>
+    <button onClick="showUpdateForm('{{ this.id }}','{{ this.name }}')" type="button" class="btn btn-light float-right btn-sm mr-3">Update</button>
+    </li> 
+    {{/each}}
+</ul>
+
+
+<div class="container mt-4" id="update-form" style="display: none;">
+    
+<form action="/update" method="post">
+
+  <input type="hidden" name="id" value="" id="new-data-id">
+
+  <div class="form-row align-items-center">
+
+    <div class="col-auto">
+      <label class="sr-only" for="inlineFormInput">Name</label>
+      <input type="text" class="form-control mb-2" name="newname" id="new-name" placeholder="New Name">
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary mb-2">Submit</button>
+    </div>
+
+  </div>
+</form>
+</div>
+
+<hr>
+<a class="btn btn-primary" href="/" role="button">Insert More</a>
+
+<script>
+  function showUpdateForm(id, name){
+    document.getElementById('update-form').style.display = "block";
+    document.getElementById('new-data-id').value = id;
+    document.getElementById('new-name').value = name;
+  }
+</script>
