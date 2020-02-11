@@ -36,26 +36,32 @@ router.get('/names',function(req, res, next){
 
 router.post('/update', function(req, res, next){
   var id =  req.body.id;
-  console.log(id + ' ' + req.body.newname);
+  // console.log(id + ' ' + req.body.newname);
   UserData.findById(id, function(err, doc){
     if(err){
       console.log('Error no entry found');
     }
     doc.name = req.body.newname;
     doc.save();
-  });
-  // res.redirect('/names');
-  // res.send({newname: req.body.newname});
-  UserData.find()
+  }).then(function(doc){
+    // console.log("Updated!!!!!");
+
+    UserData.find()
   .then(function(doc){
     res.send({updatedItem: doc, newname: req.body.newname});
   });
+
+
+  });
+  // res.redirect('/names');
+  // res.send({newname: req.body.newname});
   
+
 });
 
-router.get('/delete/:id', function(req, res, next){
-  var id = req.params.id;
+router.post('/delete', function(req, res, next){
+  var id = req.body.id;
   UserData.findByIdAndRemove(id).exec();
-  res.redirect('/names');
+  // res.send();
 });
 module.exports = router;

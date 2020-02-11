@@ -5,16 +5,16 @@
 
 <ul class="list-group container" id="nameList">
     {{#each items}}
-  <li class="list-group-item"> {{ this.name }} 
-    <a href="/delete/{{ this.id }}"><button type="button" class="close mt-1 text-danger" aria-label="Close" style="outline: none;"><span aria-hidden="true">&times;</span></button></a>
-    <button onClick="showUpdateForm('{{ this.id }}','{{ this.name }}')" type="button" class="btn btn-light float-right btn-sm mr-3">Update</button>
-    </li> 
+  <li class="list-group-item" id="{{ this.id }}list"> <span id="{{ this.id }}name"> {{ this.name }} </span>
+    <button onClick="deleteData('{{ this.id }}')" type="button" class="close mt-1 text-danger" aria-label="Close" style="outline: none;"><span aria-hidden="true">&times;</span></button>
+    <button onClick="showUpdateForm('{{ this.id }}')" type="button" class="btn btn-light float-right btn-sm mr-3">Update</button>
+    </li>
     {{/each}}
 </ul>
 
 
 <div class="container mt-4" id="update-form" style="display: none;">
-    
+
 <form method="post" id="updateForm">
 
   <input type="hidden" name="id" value="" id="new-data-id">
@@ -26,7 +26,7 @@
       <input type="text" class="form-control mb-2" name="newname" id="new-name" placeholder="New Name">
     </div>
     <div class="col-auto">
-      <button type="submit" class="btn btn-primary mb-2">Submit</button>
+      <button type="submit" onclick="shownewData()" class="btn btn-primary mb-2">Submit</button>
     </div>
 
   </div>
@@ -38,27 +38,41 @@
 <a class="btn btn-primary" href="/" role="button">Insert More</a>
 
 <script>
-  function showUpdateForm(id, name){
+  function showUpdateForm(id){
     document.getElementById('update-form').style.display = "block";
     document.getElementById('new-data-id').value = id;
-    document.getElementById('new-name').value = name;
+    document.getElementById('new-name').value = document.getElementById(id + 'name').innerHTML;
+  }
+
+  function shownewData(){
+    var id = document.getElementById('new-data-id').value;
+    var newname = document.getElementById('new-name').value;
+    document.getElementById(id + 'name').innerHTML = newname;
+
+    document.getElementById('update-form').style.display = "none";
   }
 
   $(document).ready(function(){
     $('form#updateForm').on('submit', function(e){
       e.preventDefault();
       var data = {'id': $('input[name = id]').val(), 'newname': $('input[name = newname]').val() };
-
       $.ajax({
         type: 'post',
         data: data,
         url: '/update',
         dataType: 'json'
-      }).done(function(data){
-        $('#updatedName').html(
-          data.newname
-        );
-      });
+      }).done(function(data){});
     });
   });
+
+  function deleteData(id){
+    $('#'+id+'list').remove();
+    var data = {'id': id};
+    $.ajax({
+      type: 'post',
+      data: data,
+      url: '/delete',
+      dataType: 'json'
+    }).done(function(data){});
+  }
 </script>
